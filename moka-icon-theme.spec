@@ -1,7 +1,6 @@
-#
 # Spec file for package moka-icon-theme
 #
-# Copyright (c) 2016 Sam Hewitt
+# Copyright (c) 2016 Sam Hewitt <hewittsamuel@gmail.com>
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -13,44 +12,36 @@
 # published by the Open Source Initiative.
 #
 
-Name:           moka-icon-theme
-Version:        5.3
-Release:        2
-License:        CC-BY-SA-4.0
-Summary:        Moka Icon theme
-Url:            https://snwh.org/moka
-Group:          System/GUI/Other
-Source:         %{name}-%{version}.tar.xz
-BuildRequires:  automake
-BuildRequires:  fdupes
-BuildRequires:  icon-naming-utils >= 0.8.7
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildArch:      noarch
-Requires:		faba-icon-theme
+
+Name:		moka-icon-theme
+Version:	5.3
+Release:	3
+Summary:	Moka Icon theme
+Group:		System/GUI/Other
+License:    CC-BY-SA-4.0
+Group:      System/GUI/GNOME
+Url:        https://snwh.org/moka
+Source0:	%{name}-%{version}.tar.gz
+Requires:	faba-icon-theme
+BuildArch:	noarch
 
 %description
-Moka is simple and modern icon theme with material design influences.
+Moka is simple and modern icon theme with material design influences, this particular package is a custom build for Chapeau Linux
 
 %prep
 %setup -q
-find -L . -type l -print -delete
-chmod +x autogen.sh
-chmod a-x AUTHORS README.md
 
 %build
-./autogen.sh
-make %{?_smp_mflags}
 
 %install
-make install DESTDIR=%{buildroot} %{?_smp_mflags}
-rm -f %{buildroot}%{_datadir}/icons/Moka/AUTHORS
-%fdupes %{buildroot}%{_datadir}/icons/Moka
+install -dpm 0755 $RPM_BUILD_ROOT%{_datadir}/icons/
+cp -a Moka/ $RPM_BUILD_ROOT%{_datadir}/icons/
 
-%post
-%icon_theme_cache_post Moka
+%clean
+# Delete dead icon symlinks
+# find -L . -type l -delete
 
 %files
-%defattr(-,root,root)
-%doc AUTHORS COPYING LICENSE_* README.md
-%{_datadir}/icons/Moka
-%ghost %{_datadir}/icons/Moka/icon-theme.cache
+#%doc AUTHORS COPYING
+%{_datadir}/icons/Moka/
+
